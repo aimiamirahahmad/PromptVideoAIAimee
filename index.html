@@ -1378,3 +1378,1405 @@ Peraturan Penting:
     </script>
 </body>
 </html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudioArahan AI — Penjana Prompt Video, Skrip, Storyboard & SRT</title>
+    <!-- Muat turun Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Muat turun Fon Inter dan JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        studio: {
+                            950: '#09090b',
+                            900: '#111115',
+                            850: '#16161c',
+                            800: '#1e1e26',
+                            700: '#2b2b36',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Penyesuaian bar skrol yang kemas dan moden */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f3f46;
+        }
+        .glass-panel {
+            background: rgba(22, 22, 28, 0.85);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-studio-950 text-zinc-100 font-sans antialiased min-h-screen flex flex-col overflow-x-hidden selection:bg-amber-500/30 selection:text-amber-200">
+
+    <!-- Bar Navigasi Utama -->
+    <header class="sticky top-0 z-40 border-b border-zinc-800/80 bg-studio-950/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/20 shrink-0">
+                    <!-- Ikon Kamera Filem SVG -->
+                    <svg class="w-5 h-5 text-zinc-950" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-base sm:text-lg font-bold tracking-tight text-white">StudioArahan <span class="text-amber-400">AI</span></h1>
+                        <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                            Pro Suite
+                        </span>
+                    </div>
+                    <p class="text-xs text-zinc-400 hidden sm:block">Penjana Skrip, Storyboard, Cadangan Babak & Sari Kata (.SRT)</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="exportFullProductionBible()" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-zinc-800/90 hover:bg-zinc-700 text-zinc-200 border border-zinc-700/80 transition active:scale-95">
+                    <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span class="hidden md:inline">Eksport Semua (.TXT)</span>
+                    <span class="md:hidden">Eksport</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Kandungan Utama Aplikasi -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <!-- PANEL KIRI: Taklimat Pengarah (Input Konfigurasi Video) -->
+            <section class="lg:col-span-4 space-y-5 bg-studio-900 border border-zinc-800/90 rounded-2xl p-5 shadow-xl">
+                <div class="flex items-center justify-between border-b border-zinc-800 pb-3.5">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                        <h2 class="text-sm font-semibold uppercase tracking-wider text-zinc-200">Taklimat Produksi</h2>
+                    </div>
+                    <button type="button" onclick="resetForm()" class="text-xs text-zinc-400 hover:text-amber-400 transition">
+                        Kosongkan
+                    </button>
+                </div>
+
+                <!-- Borang Konfigurasi -->
+                <form id="briefForm" onsubmit="handleGenerateSubmit(event)" class="space-y-4">
+                    <!-- Topik / Konsep Video -->
+                    <div>
+                        <label for="topicInput" class="block text-xs font-medium text-zinc-300 mb-1.5">
+                            Topik atau Konsep Utama Video <span class="text-amber-400">*</span>
+                        </label>
+                        <textarea id="topicInput" rows="4"
+                            placeholder="Contoh: Iklan sinematik memperkenalkan kopi panggang tempatan di Cameron Highlands pada waktu subuh berkabus, menekankan aroma dan ketelitian barista..."
+                            class="w-full rounded-xl bg-studio-950 border border-zinc-800 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-sm text-zinc-100 placeholder-zinc-500 p-3 transition resize-y"></textarea>
+                    </div>
+
+                    <!-- Gambar Rujukan (Baru) -->
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-300 mb-1.5">Gambar Rujukan / Elemen Wajib (Pilihan)</label>
+                        <div class="flex items-center gap-3">
+                            <label for="referenceImageInput" class="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl border border-dashed border-zinc-700 bg-studio-950/50 hover:bg-studio-900 hover:border-amber-500/50 cursor-pointer transition text-xs text-zinc-400">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <span id="referenceImageName">Muat naik gambar rujukan...</span>
+                                <input type="file" id="referenceImageInput" accept="image/png, image/jpeg, image/webp" class="hidden" onchange="handleImageUpload(event)">
+                            </label>
+                            <button type="button" onclick="clearReferenceImage()" id="clearImageBtn" class="hidden p-2.5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 transition" title="Padam Gambar">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                        <input type="hidden" id="referenceImageBase64" value="">
+                        <input type="hidden" id="referenceImageMime" value="">
+                    </div>
+
+                    <!-- Nisbah Aspek (Aspect Ratio) -->
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-300 mb-1.5">Nisbah Aspek (Aspect Ratio)</label>
+                        <div class="grid grid-cols-4 gap-2" id="aspectRatioGroup">
+                            <button type="button" data-ratio="16:9" onclick="selectAspectRatio('16:9')" class="ratio-btn active py-2 px-2 rounded-xl border text-xs font-medium transition flex flex-col items-center gap-1 bg-amber-500/15 border-amber-500 text-amber-300">
+                                <span class="w-6 h-3.5 border border-current rounded-sm"></span>
+                                <span>16:9</span>
+                            </button>
+                            <button type="button" data-ratio="9:16" onclick="selectAspectRatio('9:16')" class="ratio-btn py-2 px-2 rounded-xl border border-zinc-800 bg-studio-950 text-zinc-400 hover:border-zinc-700 text-xs font-medium transition flex flex-col items-center gap-1">
+                                <span class="w-3.5 h-6 border border-current rounded-sm"></span>
+                                <span>9:16</span>
+                            </button>
+                            <button type="button" data-ratio="1:1" onclick="selectAspectRatio('1:1')" class="ratio-btn py-2 px-2 rounded-xl border border-zinc-800 bg-studio-950 text-zinc-400 hover:border-zinc-700 text-xs font-medium transition flex flex-col items-center gap-1">
+                                <span class="w-4 h-4 border border-current rounded-sm"></span>
+                                <span>1:1</span>
+                            </button>
+                            <button type="button" data-ratio="2.39:1" onclick="selectAspectRatio('2.39:1')" class="ratio-btn py-2 px-2 rounded-xl border border-zinc-800 bg-studio-950 text-zinc-400 hover:border-zinc-700 text-xs font-medium transition flex flex-col items-center gap-1">
+                                <span class="w-7 h-2.5 border border-current rounded-sm"></span>
+                                <span>2.39:1</span>
+                            </button>
+                        </div>
+                        <input type="hidden" id="aspectRatioInput" value="16:9">
+                    </div>
+
+                    <!-- Grid 2 Kolum: Durasi & Bilangan Babak -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label for="durationSelect" class="block text-xs font-medium text-zinc-300 mb-1.5">Durasi Sasaran</label>
+                            <select id="durationSelect" class="w-full rounded-xl bg-studio-950 border border-zinc-800 focus:border-amber-500 text-sm text-zinc-200 p-2.5">
+                                <option value="10 saat">10 Saat (Sangat Pantas)</option>
+                                <option value="15 saat">15 Saat (Pantas)</option>
+                                <option value="30 saat" selected>30 Saat (Standard)</option>
+                                <option value="45 saat">45 Saat (Naratif)</option>
+                                <option value="60 saat">60 Saat (Mendalam)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="sceneCountSelect" class="block text-xs font-medium text-zinc-300 mb-1.5">Bilangan Babak</label>
+                            <select id="sceneCountSelect" class="w-full rounded-xl bg-studio-950 border border-zinc-800 focus:border-amber-500 text-sm text-zinc-200 p-2.5">
+                                <option value="3">3 Babak</option>
+                                <option value="4">4 Babak</option>
+                                <option value="5" selected>5 Babak</option>
+                                <option value="6">6 Babak</option>
+                                <option value="8">8 Babak</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Gaya Visual Sinematik -->
+                    <div>
+                        <label for="visualStyleSelect" class="block text-xs font-medium text-zinc-300 mb-1.5">Gaya Visual & Sinematografi</label>
+                        <select id="visualStyleSelect" class="w-full rounded-xl bg-studio-950 border border-zinc-800 focus:border-amber-500 text-sm text-zinc-200 p-2.5">
+                            <option value="Sinematik Realistik (Photorealistic 35mm Film, Depth of Field)">Sinematik Realistik (Filem 35mm)</option>
+                            <option value="Komersial Moden Ultra-Tajam (Studio Lighting, Slow-Motion)">Komersial Produk Ultra-Tajam</option>
+                            <option value="Dokumentari Alam & Budaya (National Geographic Style, Natural Light)">Dokumentari Alam & Budaya</option>
+                            <option value="Animasi 3D Bergaya (Pixar / Unreal Engine 5 Render)">Animasi 3D (Unreal Engine / Pixar)</option>
+                            <option value="Anime Sinematik (Makoto Shinkai Lighting, Lush Backgrounds)">Anime Sinematik</option>
+                            <option value="Cyberpunk Neon Futuristik (Anamorphic Lens Flare, Rainy Night)">Cyberpunk Neon Futuristik</option>
+                            <option value="Minimalis Korporat & Teknologi (Clean Editorial Aesthetic)">Minimalis Korporat & Teknologi</option>
+                        </select>
+                    </div>
+
+                    <!-- Palet Warna & Tema Visual (Color Grading) -->
+                    <div class="bg-studio-950/80 border border-zinc-800/90 rounded-xl p-3.5 space-y-3">
+                        <div class="flex items-center justify-between gap-2">
+                            <label class="block text-xs font-medium text-zinc-200">Palet Warna & Tema Video</label>
+                            <span id="selectedPaletteLabel" class="text-[11px] font-medium text-amber-400">Golden Hour Hangat</span>
+                        </div>
+
+                        <!-- Pilihan Pratetap Palet Warna -->
+                        <div id="palettePresetGrid" class="grid grid-cols-2 gap-2">
+                            <!-- Dijana secara dinamik oleh JS -->
+                        </div>
+
+                        <!-- Penyesuai 4 Warna Tersuai (Color Pickers) -->
+                        <div class="pt-2 border-t border-zinc-800/80">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[11px] text-zinc-400">Ubah Suai Warna Tema (Klik untuk tukar):</span>
+                                <span class="text-[10px] font-mono text-zinc-500">4 Warna Utama</span>
+                            </div>
+                            <div id="customColorPickers" class="grid grid-cols-4 gap-2">
+                                <!-- 4 input warna dijana oleh JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nada & Model AI Video Sasaran -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label for="toneSelect" class="block text-xs font-medium text-zinc-300 mb-1.5">Nada & Emosi</label>
+                            <select id="toneSelect" class="w-full rounded-xl bg-studio-950 border border-zinc-800 focus:border-amber-500 text-sm text-zinc-200 p-2.5">
+                                <option value="Inspirasi & Epik">Inspirasi & Epik</option>
+                                <option value="Hangat & Emosional">Hangat & Emosional</option>
+                                <option value="Energik & Dinamik">Energik & Dinamik</option>
+                                <option value="Misteri & Dramatik">Misteri & Dramatik</option>
+                                <option value="Profesional & Meyakinkan">Profesional & Jelas</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="targetModelSelect" class="block text-xs font-medium text-zinc-300 mb-1.5">Sasaran AI Video</label>
+                            <select id="targetModelSelect" onchange="renderProductionWorkspace()" class="w-full rounded-xl bg-studio-950 border border-zinc-800 focus:border-amber-500 text-sm text-zinc-200 p-2.5">
+                                <option value="Universal (Google Flow / Veo 3 / Sora / Runway / Kling)">Universal (Semua AI)</option>
+                                <option value="Google Flow (Veo 3 / Scene Builder)">Google Flow (Veo 3 / Filmmaking)</option>
+                                <option value="Google Veo / OpenAI Sora">Google Veo / OpenAI Sora</option>
+                                <option value="Runway Gen-3 Alpha">Runway Gen-3 Alpha</option>
+                                <option value="Kling AI">Kling AI</option>
+                                <option value="Luma Dream Machine">Luma Dream Machine</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Bahasa Skrip & Subtitle -->
+                    <div>
+                        <label for="languageSelect" class="block text-xs font-medium text-zinc-300 mb-1.5">Bahasa Skrip & Subtitle (.SRT)</label>
+                        <select id="languageSelect" class="w-full rounded-xl bg-studio-950 border border-zinc-800 focus:border-amber-500 text-sm text-zinc-200 p-2.5">
+                            <option value="Bahasa Melayu (Standard & Natural)" selected>Bahasa Melayu</option>
+                            <option value="Bahasa Inggeris (English)">Bahasa Inggeris (English)</option>
+                            <option value="Dwibahasa (Baris 1 Bahasa Melayu, Baris 2 English)">Dwibahasa (BM + EN dalam SRT)</option>
+                        </select>
+                    </div>
+
+                    <!-- Butang Jana Utama -->
+                    <button type="submit" id="generateBtn" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-zinc-950 font-bold text-sm shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed">
+                        <svg id="generateIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        <svg id="generateSpinner" class="w-5 h-5 animate-spin hidden" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span id="generateBtnText">Jana Pakej Produksi Video</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- PANEL KANAN: Ruang Kerja Hasil Produksi -->
+            <section class="lg:col-span-8 relative min-h-[400px]">
+                
+                <!-- Paparan Ruang Kerja Kosong (Empty State) -->
+                <div id="emptyWorkspaceState" class="absolute inset-0 flex flex-col items-center justify-center text-center p-8 bg-studio-900 border border-zinc-800/90 rounded-2xl shadow-xl h-full">
+                    <div class="w-16 h-16 mb-4 rounded-2xl bg-zinc-800/50 flex items-center justify-center border border-zinc-700/50">
+                        <svg class="w-8 h-8 text-zinc-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-semibold text-zinc-300">Ruang Kerja Produksi Kosong</h3>
+                    <p class="text-sm text-zinc-500 mt-2 max-w-sm leading-relaxed">Sila lengkapkan taklimat di sebelah kiri dan klik <strong class="text-zinc-400">"Jana Pakej Produksi Video"</strong> untuk menjana skrip, storyboard dan sari kata (.SRT).</p>
+                </div>
+
+                <!-- Kandungan Ruang Kerja (Akan dipaparkan selepas AI menjana data) -->
+                <div id="productionWorkspaceContent" class="hidden space-y-5">
+                    
+                    <!-- Kad Ringkasan Projek & Palet Warna -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-between items-start bg-gradient-to-br from-studio-900 to-studio-950 border border-zinc-800 rounded-2xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
+                        <!-- Latar belakang hiasan -->
+                        <div class="absolute -right-20 -top-20 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                        
+                        <div class="space-y-3 z-10 flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500 text-zinc-950 uppercase tracking-widest">
+                                    Draf Produksi
+                                </span>
+                                <span id="metaDurationBadge" class="text-xs font-medium text-zinc-400">
+                                    --
+                                </span>
+                            </div>
+                            <h2 id="projectTitleDisplay" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight leading-tight">
+                                Tajuk Projek
+                            </h2>
+                            <p id="projectLoglineDisplay" class="text-sm text-zinc-300 leading-relaxed max-w-2xl">
+                                Logline projek akan dipaparkan di sini.
+                            </p>
+                        </div>
+
+                        <!-- Palet Warna Sinematik -->
+                        <div class="bg-studio-950/90 border border-zinc-800 rounded-xl p-3.5 w-full sm:w-auto sm:min-w-[260px] z-10">
+                            <div class="flex items-center justify-between gap-2 mb-2.5">
+                                <div class="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">Palet Warna & Mood</div>
+                                <div class="flex items-center gap-1.5">
+                                    <button type="button" onclick="copyAllPaletteHex()" class="px-2 py-0.5 rounded-md bg-zinc-800 hover:bg-zinc-700 text-[10px] font-medium text-zinc-300 border border-zinc-700 transition" title="Salin semua kod Hex">
+                                        Salin Hex
+                                    </button>
+                                    <button type="button" onclick="applyPaletteToAllPrompts()" class="px-2 py-0.5 rounded-md bg-amber-500/15 hover:bg-amber-500/25 text-[10px] font-medium text-amber-300 border border-amber-500/30 transition" title="Suntik warna tema ini ke semua prompt babak">
+                                        Terap ke Prompt
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="colorPaletteContainer" class="grid grid-cols-4 gap-2">
+                                <!-- Diisi secara dinamik oleh JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cadangan Arahan Visual & Audio Keseluruhan -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5 pt-4 border-t border-zinc-800/80">
+                        <div class="bg-studio-850/80 rounded-xl p-3.5 border border-zinc-800/80">
+                            <div class="flex items-center gap-2 text-xs font-semibold text-amber-400 mb-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                <span>Arahan Sinematografi Keseluruhan</span>
+                            </div>
+                            <p id="visualDirectionDisplay" class="text-xs text-zinc-300 leading-relaxed">
+                                Lensa anamorfik 35mm & 85mm makro, pencahayaan semula jadi Golden Hour dengan kontras hangat dan bayang lembut.
+                            </p>
+                        </div>
+                        <div class="bg-studio-850/80 rounded-xl p-3.5 border border-zinc-800/80">
+                            <div class="flex items-center gap-2 text-xs font-semibold text-indigo-400 mb-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                                </svg>
+                                <span>Cadangan Muzik Latar & Reka Bentuk Bunyi</span>
+                            </div>
+                            <p id="audioDirectionDisplay" class="text-xs text-zinc-300 leading-relaxed">
+                                Petikan gitar akustik minimalis dengan alunan piano hangat (85 BPM), digabungkan bersama kesan bunyi ASMR biji kopi dikisar dan wap panas.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bar Navigasi Tab Ruang Kerja -->
+                <div class="flex items-center gap-2 overflow-x-auto pb-1 border-b border-zinc-800" role="tablist">
+                    <button type="button" onclick="switchTab('storyboard')" id="tab-storyboard" class="tab-btn active shrink-0 px-4 py-2.5 rounded-t-xl text-sm font-semibold border-b-2 border-amber-400 text-amber-400 bg-studio-900/90 transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                        <span>Storyboard & Babak</span>
+                        <span id="sceneCountBadge" class="px-1.5 py-0.5 text-[11px] rounded-md bg-amber-500/20 text-amber-300">5</span>
+                    </button>
+
+                    <button type="button" onclick="switchTab('script')" id="tab-script" class="tab-btn shrink-0 px-4 py-2.5 rounded-t-xl text-sm font-medium border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span>Skrip Penuh</span>
+                    </button>
+
+                    <button type="button" onclick="switchTab('srt')" id="tab-srt" class="tab-btn shrink-0 px-4 py-2.5 rounded-t-xl text-sm font-medium border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                        </svg>
+                        <span>Subtitle (.SRT)</span>
+                    </button>
+
+                    <button type="button" onclick="switchTab('master')" id="tab-master" class="tab-btn shrink-0 px-4 py-2.5 rounded-t-xl text-sm font-medium border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                        </svg>
+                        <span>Master Prompt & JSON</span>
+                    </button>
+                </div>
+
+                <!-- KANDUNGAN TAB 1: STORYBOARD & CADANGAN BABAK -->
+                <div id="panel-storyboard" class="tab-panel space-y-4">
+                    <div id="scenesContainer" class="space-y-4">
+                        <!-- Kad babak akan dijana di sini -->
+                    </div>
+                </div>
+
+                <!-- KANDUNGAN TAB 2: SKRIP PENUH -->
+                <div id="panel-script" class="tab-panel hidden space-y-4">
+                    <div class="bg-studio-900 border border-zinc-800 rounded-2xl p-5 sm:p-6 space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 pb-4">
+                            <div>
+                                <h3 class="text-base font-bold text-white">Skrip Audio-Visual (AV Script)</h3>
+                                <p class="text-xs text-zinc-400">Susunan dialog, suara latar (voiceover), aksi visual dan kesan bunyi mengikut garis masa.</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button type="button" onclick="copyScriptText()" class="px-3 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-200 border border-zinc-700 transition flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                    </svg>
+                                    <span>Salin Skrip</span>
+                                </button>
+                                <button type="button" onclick="downloadScriptTxt()" class="px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-xs font-semibold text-amber-300 border border-amber-500/30 transition flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    <span>Muat Turun .TXT</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Jadual Skrip AV Berstruktur -->
+                        <div class="overflow-x-auto rounded-xl border border-zinc-800">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-studio-950 text-[11px] uppercase tracking-wider text-zinc-400 border-b border-zinc-800">
+                                        <th class="py-3 px-4 w-24">Masa</th>
+                                        <th class="py-3 px-4 w-2/5">Visual & Arahan Kamera</th>
+                                        <th class="py-3 px-4">Suara Latar (VO) / Dialog & SFX</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="avScriptTableBody" class="divide-y divide-zinc-800/80 text-xs sm:text-sm">
+                                    <!-- Baris skrip dijana oleh JS -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Nota Skrip Naratif Penuh -->
+                        <div class="bg-studio-950 rounded-xl p-4 border border-zinc-800">
+                            <div class="text-xs font-semibold text-zinc-400 mb-2">Draf Naratif & Catatan Pengarah:</div>
+                            <div id="fullScriptNarrative" class="text-sm text-zinc-200 whitespace-pre-line leading-relaxed"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KANDUNGAN TAB 3: EDITOR & PENJANA SUBTITLE (.SRT) -->
+                <div id="panel-srt" class="tab-panel hidden space-y-4">
+                    <div class="bg-studio-900 border border-zinc-800 rounded-2xl p-5 sm:p-6 space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 pb-4">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h3 class="text-base font-bold text-white">Fail Sari Kata SubRip (.SRT)</h3>
+                                    <span id="srtValidationBadge" class="px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                                        Format SRT Sah
+                                    </span>
+                                </div>
+                                <p class="text-xs text-zinc-400 mt-0.5">Sedia untuk diimport terus ke CapCut, Premiere Pro, DaVinci Resolve atau YouTube.</p>
+                            </div>
+
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button type="button" onclick="rebuildSrtFromScenes()" class="px-3 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-300 border border-zinc-700 transition" title="Bina semula cap masa SRT daripada babak">
+                                    Segerak Babak
+                                </button>
+                                <button type="button" onclick="copySrtText()" class="px-3 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-200 border border-zinc-700 transition flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                    </svg>
+                                    <span>Salin SRT</span>
+                                </button>
+                                <button type="button" onclick="downloadSrtFile()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold shadow-lg shadow-emerald-500/20 transition flex items-center gap-1.5">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    <span>Muat Turun .SRT</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Editor Teks SRT -->
+                        <div>
+                            <label for="srtEditorTextarea" class="sr-only">Kandungan Fail SRT</label>
+                            <textarea id="srtEditorTextarea" rows="16" oninput="validateSrtContent()"
+                                class="w-full rounded-xl bg-studio-950 border border-zinc-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 font-mono text-xs sm:text-sm text-emerald-100 p-4 leading-relaxed"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                    <div id="panel-master" class="tab-panel hidden space-y-4">
+                        <div class="bg-studio-900 border border-zinc-800 rounded-2xl p-5 sm:p-6 space-y-4">
+                            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 pb-4">
+                                <div>
+                                    <h3 class="text-base font-bold text-white">Struktur JSON & Rangkaian Prompt Induk</h3>
+                                    <p class="text-xs text-zinc-400">Gunakan struktur ini untuk automasi aliran kerja API atau rujukan produksi penuh.</p>
+                                </div>
+                                <button type="button" onclick="copyJsonOutput()" class="px-3.5 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-200 border border-zinc-700 transition">
+                                    Salin JSON Berstruktur
+                                </button>
+                            </div>
+                            <pre id="jsonOutputDisplay" class="w-full rounded-xl bg-studio-950 border border-zinc-800 font-mono text-xs text-zinc-300 p-4 overflow-x-auto max-h-[500px] leading-relaxed"></pre>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Notifikasi Toast Tersuai (Menggantikan alert()) -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <script>
+        // =========================================================================
+        // KONFIGURASI API & DATA CONTOH AWAL PRODUKSI
+        // =========================================================================
+        const apiKey = "";
+        const TEXT_MODEL = "gemini-3-flash-preview";
+        const IMAGE_MODEL = "gemini-3.1-flash-image-preview";
+
+        // Buang data contoh dan tetapkan kepada null
+        let currentProductionData = null;
+
+        // =========================================================================
+        // TEMPLAT PRESET PANTAS & PALET WARNA TEMA
+        // =========================================================================
+        const COLOR_PALETTE_PRESETS = [
+            {
+                id: "golden_hour",
+                name: "Golden Hour Hangat",
+                englishGrading: "warm golden hour color grading, rich amber highlights, deep espresso shadows, soft creamy tones",
+                colors: [
+                    { hex: "#D97706", name: "Amber Emas" },
+                    { hex: "#291D18", name: "Bayang Gelap" },
+                    { hex: "#10B981", name: "Zamrud Alam" },
+                    { hex: "#FDE68A", name: "Cahaya Subuh" }
+                ]
+            },
+            {
+                id: "teal_orange",
+                name: "Teal & Orange Filem",
+                englishGrading: "Hollywood blockbuster teal and orange color grading, vibrant warm skin tones against cool cyan-teal shadows",
+                colors: [
+                    { hex: "#0D9488", name: "Teal Sinematik" },
+                    { hex: "#EA580C", name: "Jingga Hangat" },
+                    { hex: "#0F172A", name: "Biru Malam" },
+                    { hex: "#FDBA74", name: "Sorotan Kulit" }
+                ]
+            },
+            {
+                id: "cyberpunk_neon",
+                name: "Cyberpunk Neon",
+                englishGrading: "cyberpunk neon color palette, electric magenta and cyan rim lights, deep indigo night shadows, high contrast",
+                colors: [
+                    { hex: "#EC4899", name: "Neon Magenta" },
+                    { hex: "#06B6D4", name: "Sian Elektrik" },
+                    { hex: "#1E1B4B", name: "Indigo Gelap" },
+                    { hex: "#A855F7", name: "Ungu Futuristik" }
+                ]
+            },
+            {
+                id: "nordic_moody",
+                name: "Moody & Misteri",
+                englishGrading: "moody desaturated Nordic color grading, cool slate blues, muted charcoal shadows, overcast natural tones",
+                colors: [
+                    { hex: "#334155", name: "Kelabu Batu" },
+                    { hex: "#64748B", name: "Kabus Dingin" },
+                    { hex: "#0F172A", name: "Hitam Arang" },
+                    { hex: "#CBD5E1", name: "Perak Pucat" }
+                ]
+            },
+            {
+                id: "emerald_nature",
+                name: "Hutan & Organik",
+                englishGrading: "lush natural documentary color palette, rich emerald greens, warm earthy browns, soft dappled sunlight",
+                colors: [
+                    { hex: "#059669", name: "Hijau Kanopi" },
+                    { hex: "#064E3B", name: "Rimba Dalam" },
+                    { hex: "#A3E635", name: "Pucuk Segar" },
+                    { hex: "#713F12", name: "Tanah Hutan" }
+                ]
+            },
+            {
+                id: "pastel_clean",
+                name: "Pastel & Bersih",
+                englishGrading: "soft pastel aesthetic color palette, airy bright highlights, gentle blush pink and sky blue accents, clean editorial look",
+                colors: [
+                    { hex: "#F472B6", name: "Merah Jambu" },
+                    { hex: "#60A5FA", name: "Biru Langit" },
+                    { hex: "#A78BFA", name: "Lavender" },
+                    { hex: "#F8FAFC", name: "Putih Bersih" }
+                ]
+            }
+        ];
+
+        let selectedPaletteState = JSON.parse(JSON.stringify(COLOR_PALETTE_PRESETS[0]));
+
+        function initColorPaletteSelector() {
+            const grid = document.getElementById('palettePresetGrid');
+            if (!grid) return;
+
+            grid.innerHTML = COLOR_PALETTE_PRESETS.map(preset => {
+                const isSelected = selectedPaletteState.id === preset.id;
+                const dotsHtml = preset.colors.map(c =>
+                    `<span class="w-3 h-3 rounded-full border border-black/30" style="background-color:${c.hex}"></span>`
+                ).join('');
+
+                return `
+                    <button type="button" onclick="selectColorPalettePreset('${preset.id}')"
+                        class="text-left p-2 rounded-lg border transition flex flex-col gap-1.5 ${isSelected ? 'bg-amber-500/15 border-amber-500 text-amber-200' : 'bg-studio-900 border-zinc-800 text-zinc-300 hover:border-zinc-700'}">
+                        <div class="flex items-center gap-1">${dotsHtml}</div>
+                        <span class="text-[11px] font-medium truncate w-full">${preset.name}</span>
+                    </button>
+                `;
+            }).join('');
+
+            renderCustomColorPickers();
+        }
+
+        function renderCustomColorPickers() {
+            const container = document.getElementById('customColorPickers');
+            const label = document.getElementById('selectedPaletteLabel');
+            if (!container) return;
+
+            if (label) {
+                label.textContent = selectedPaletteState.name;
+            }
+
+            container.innerHTML = selectedPaletteState.colors.map((c, idx) => `
+                <label class="group flex flex-col items-center bg-studio-900 border border-zinc-800 hover:border-zinc-600 rounded-lg p-1.5 cursor-pointer transition">
+                    <input type="color" value="${c.hex}" onchange="updateCustomPaletteColor(${idx}, this.value)"
+                        class="w-full h-6 rounded cursor-pointer bg-transparent border-0 p-0">
+                    <span class="text-[10px] font-mono text-zinc-400 mt-1 uppercase">${c.hex}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectColorPalettePreset(presetId) {
+            const found = COLOR_PALETTE_PRESETS.find(p => p.id === presetId);
+            if (!found) return;
+            selectedPaletteState = JSON.parse(JSON.stringify(found));
+            initColorPaletteSelector();
+            if (currentProductionData) {
+                currentProductionData.colorPalette = JSON.parse(JSON.stringify(selectedPaletteState.colors));
+                renderProductionWorkspace();
+            }
+        }
+
+        function updateCustomPaletteColor(index, newHex) {
+            if (!selectedPaletteState.colors[index]) return;
+            selectedPaletteState.id = "custom";
+            selectedPaletteState.name = "Palet Tersuai (Custom)";
+            selectedPaletteState.colors[index].hex = newHex.toUpperCase();
+            selectedPaletteState.colors[index].name = `Warna ${index + 1}`;
+            const hexList = selectedPaletteState.colors.map(c => c.hex).join(", ");
+            selectedPaletteState.englishGrading = `custom harmonious color palette featuring ${hexList}, cohesive cinematic color grading`;
+            initColorPaletteSelector();
+            if (currentProductionData) {
+                currentProductionData.colorPalette = JSON.parse(JSON.stringify(selectedPaletteState.colors));
+                renderProductionWorkspace();
+            }
+        }
+
+        // =========================================================================
+        // PENGENDALI BORANG, TAB & ANTARA MUKA
+        // =========================================================================
+        function selectAspectRatio(ratio) {
+            document.getElementById('aspectRatioInput').value = ratio;
+            document.querySelectorAll('.ratio-btn').forEach(btn => {
+                const isMatch = btn.getAttribute('data-ratio') === ratio;
+                if (isMatch) {
+                    btn.className = "ratio-btn active py-2 px-2 rounded-xl border text-xs font-medium transition flex flex-col items-center gap-1 bg-amber-500/15 border-amber-500 text-amber-300";
+                } else {
+                    btn.className = "ratio-btn py-2 px-2 rounded-xl border border-zinc-800 bg-studio-950 text-zinc-400 hover:border-zinc-700 text-xs font-medium transition flex flex-col items-center gap-1";
+                }
+            });
+        }
+
+        // Pengendalian Muat Naik Gambar
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64String = e.target.result.split(',')[1];
+                document.getElementById('referenceImageBase64').value = base64String;
+                document.getElementById('referenceImageMime').value = file.type;
+                
+                const nameLabel = document.getElementById('referenceImageName');
+                nameLabel.textContent = file.name;
+                nameLabel.classList.add('text-amber-400');
+                nameLabel.classList.remove('text-zinc-400');
+                
+                document.getElementById('clearImageBtn').classList.remove('hidden');
+                showToast("Gambar rujukan dimuat naik sedia untuk dianalisis.", "info");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearReferenceImage() {
+            document.getElementById('referenceImageInput').value = "";
+            document.getElementById('referenceImageBase64').value = "";
+            document.getElementById('referenceImageMime').value = "";
+            
+            const nameLabel = document.getElementById('referenceImageName');
+            nameLabel.textContent = "Muat naik gambar rujukan...";
+            nameLabel.classList.add('text-zinc-400');
+            nameLabel.classList.remove('text-amber-400');
+            
+            document.getElementById('clearImageBtn').classList.add('hidden');
+            showToast("Gambar rujukan dibuang.", "info");
+        }
+
+        function resetForm() {
+            document.getElementById('briefForm').reset();
+            selectAspectRatio('16:9');
+            clearReferenceImage();
+            selectedPaletteState = JSON.parse(JSON.stringify(COLOR_PALETTE_PRESETS[0]));
+            initColorPaletteSelector();
+            showToast("Borang taklimat dikosongkan.", "info");
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                const isTarget = btn.id === `tab-${tabName}`;
+                if (isTarget) {
+                    btn.className = "tab-btn active shrink-0 px-4 py-2.5 rounded-t-xl text-sm font-semibold border-b-2 border-amber-400 text-amber-400 bg-studio-900/90 transition flex items-center gap-2";
+                } else {
+                    btn.className = "tab-btn shrink-0 px-4 py-2.5 rounded-t-xl text-sm font-medium border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition flex items-center gap-2";
+                }
+            });
+
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                if (panel.id === `panel-${tabName}`) {
+                    panel.classList.remove('hidden');
+                } else {
+                    panel.classList.add('hidden');
+                }
+            });
+        }
+
+        function setLoadingState(isLoading) {
+            const btn = document.getElementById('generateBtn');
+            const icon = document.getElementById('generateIcon');
+            const spinner = document.getElementById('generateSpinner');
+            const text = document.getElementById('generateBtnText');
+
+            btn.disabled = isLoading;
+            if (isLoading) {
+                icon.classList.add('hidden');
+                spinner.classList.remove('hidden');
+                text.textContent = "Menjana Skrip, Storyboard & SRT...";
+            } else {
+                icon.classList.remove('hidden');
+                spinner.classList.add('hidden');
+                text.textContent = "Jana Pakej Produksi Video";
+            }
+        }
+
+        async function fetchWithRetry(url, options, maxRetries = 3) {
+            let delay = 1000;
+            for (let attempt = 0; attempt < maxRetries; attempt++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                        const errText = await response.text();
+                        throw new Error(`HTTP ${response.status}: ${errText}`);
+                    }
+                    return await response.json();
+                } catch (err) {
+                    if (attempt === maxRetries - 1) throw err;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        // =========================================================================
+        // PENJANAAN PAKEJ PRODUKSI BERSTRUKTUR (GEMINI API)
+        // =========================================================================
+        async function handleGenerateSubmit(event) {
+            event.preventDefault();
+
+            const topic = document.getElementById('topicInput').value.trim();
+            if (!topic) {
+                showToast("Sila masukkan topik atau konsep utama video.", "error");
+                return;
+            }
+
+            const aspectRatio = document.getElementById('aspectRatioInput').value;
+            const duration = document.getElementById('durationSelect').value;
+            const sceneCount = parseInt(document.getElementById('sceneCountSelect').value, 10) || 5;
+            const visualStyle = document.getElementById('visualStyleSelect').value;
+            const tone = document.getElementById('toneSelect').value;
+            const targetModel = document.getElementById('targetModelSelect').value;
+            const language = document.getElementById('languageSelect').value;
+            const paletteHexSummary = selectedPaletteState.colors.map(c => `${c.name} (${c.hex})`).join(", ");
+            const isGoogleFlow = targetModel.toLowerCase().includes("google flow");
+            const modelSpecificGuideline = isGoogleFlow
+                ? `Khusus untuk Google Flow (Veo 3 / Scene Builder): Susun 'aiVideoPromptEN' dalam ayat deskriptif sinematik yang lancar dengan arahan kawalan kamera tepat (Camera Controls seperti slow dolly-in, tracking shot, crane up), konsistensi watak/elemen (Ingredients), pencahayaan terperinci, serta petunjuk bunyi/suasana semula jadi (Veo 3 native audio cues) tanpa menggunakan parameter '--ar'.`
+                : `Merangkumi: [Shot Type & Camera Movement] + [Subject & Detailed Action] + [Environment & Atmosphere] + [Lighting & Color Grading] + [Lens, Film Stock & Resolution] + [--ar ${aspectRatio}].`;
+
+            const refImgBase64 = document.getElementById('referenceImageBase64').value;
+            const refImgMime = document.getElementById('referenceImageMime').value;
+            const imageInstruction = refImgBase64 
+                ? `\n6. PENTING: Pengguna telah memuat naik gambar rujukan. Anda MESTI menganalisis imej tersebut dan menyertakan elemen visual, objek, atau subjek dari gambar itu ke dalam cerita, arahan babak, dan 'aiVideoPromptEN'.` 
+                : "";
+
+            setLoadingState(true);
+
+            const systemInstruction = `Anda ialah Pengarah Filem, Penulis Skrip Komersial & Pakar Kejuruteraan Prompt Video AI bertaraf dunia.
+Tugas anda adalah menjana pakej produksi video yang amat berstruktur, terperinci, dan berkualiti tinggi berdasarkan taklimat pengguna.
+
+Peraturan Penting:
+1. Semua penerangan arahan, tajuk, logline, cadangan sinematografi (visualDescriptionBM), dan skrip mesti ditulis dalam Bahasa Melayu yang profesional dan kreatif (kecuali jika bahasa skrip dipilih Bahasa Inggeris).
+2. Konsistensi Palet Warna Tema: Pengguna telah memilih tema warna "${selectedPaletteState.name}" dengan kod warna [${paletteHexSummary}] dan gaya penggredan warna (${selectedPaletteState.englishGrading}). Pastikan semua cadangan pencahayaan (lightingAndAtmosphere) serta setiap 'aiVideoPromptEN' menerapkan nada warna ini secara konsisten, dan kembalikan palet warna tersebut dalam medan 'colorPalette'.
+3. Medan 'aiVideoPromptEN' dan 'negativePromptEN' MESTI ditulis dalam Bahasa Inggeris teknikal sinematografi yang dioptimumkan untuk penjana video AI (${targetModel}). ${modelSpecificGuideline}
+4. Pastikan 'scenes' mempunyai tepat ${sceneCount} babak yang saling berkesinambungan dari mula hingga tamat dengan cap masa (timeRange) yang sepadan dengan durasi sasaran (${duration}).
+5. Medan 'srtContent' MESTI mengikut format standard SubRip (.srt) yang sah dengan nombor jujukan, cap masa 'HH:MM:SS,mmm --> HH:MM:SS,mmm' tanpa bertindih, dan teks sari kata mengikut pilihan bahasa (${language}) yang sepadan dengan suara latar setiap babak.${imageInstruction}`;
+
+            const userPrompt = `Jana pakej produksi video penuh untuk taklimat berikut:
+- Topik / Konsep: ${topic}
+- Nisbah Aspek: ${aspectRatio}
+- Durasi Sasaran: ${duration}
+- Bilangan Babak: ${sceneCount} babak
+- Gaya Visual: ${visualStyle}
+- Tema Palet Warna: ${selectedPaletteState.name} (${paletteHexSummary})
+- Nada & Emosi: ${tone}
+- Sasaran Model AI Video: ${targetModel}
+- Bahasa Skrip & Subtitle: ${language}`;
+
+            let contentsParts = [{ text: userPrompt }];
+            if (refImgBase64) {
+                contentsParts.push({
+                    inlineData: {
+                        mimeType: refImgMime,
+                        data: refImgBase64
+                    }
+                });
+            }
+
+            const responseSchema = {
+                type: "OBJECT",
+                properties: {
+                    projectTitle: { type: "STRING" },
+                    logline: { type: "STRING" },
+                    visualDirectionSummary: { type: "STRING" },
+                    audioAndMusicRecommendation: { type: "STRING" },
+                    colorPalette: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                hex: { type: "STRING" },
+                                name: { type: "STRING" }
+                            },
+                            required: ["hex", "name"]
+                        }
+                    },
+                    fullScriptMarkdown: { type: "STRING" },
+                    srtContent: { type: "STRING" },
+                    scenes: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                sceneNumber: { type: "INTEGER" },
+                                timeRange: { type: "STRING" },
+                                durationSeconds: { type: "INTEGER" },
+                                sceneTitle: { type: "STRING" },
+                                shotType: { type: "STRING" },
+                                cameraMovement: { type: "STRING" },
+                                lightingAndAtmosphere: { type: "STRING" },
+                                visualDescriptionBM: { type: "STRING" },
+                                aiVideoPromptEN: { type: "STRING" },
+                                negativePromptEN: { type: "STRING" },
+                                voiceoverOrDialogue: { type: "STRING" },
+                                soundEffects: { type: "STRING" }
+                            },
+                            required: [
+                                "sceneNumber", "timeRange", "durationSeconds", "sceneTitle",
+                                "shotType", "cameraMovement", "lightingAndAtmosphere",
+                                "visualDescriptionBM", "aiVideoPromptEN", "negativePromptEN",
+                                "voiceoverOrDialogue", "soundEffects"
+                            ]
+                        }
+                    }
+                },
+                required: [
+                    "projectTitle", "logline", "visualDirectionSummary",
+                    "audioAndMusicRecommendation", "colorPalette",
+                    "fullScriptMarkdown", "srtContent", "scenes"
+                ]
+            };
+
+            try {
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ parts: contentsParts }],
+                    systemInstruction: { parts: [{ text: systemInstruction }] },
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: responseSchema,
+                        temperature: 0.75
+                    }
+                };
+
+                const result = await fetchWithRetry(endpoint, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                const rawText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!rawText) {
+                    throw new Error("Tiada respons diterima daripada pelayan AI.");
+                }
+
+                // Pembersihan teks sekiranya AI mengembalikan format markdown code block
+                const cleanJson = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+                const parsed = JSON.parse(cleanJson);
+                
+                parsed.scenes = (parsed.scenes || []).map(s => ({
+                    ...s,
+                    generatedImageUrl: null
+                }));
+
+                if (!parsed.colorPalette || !parsed.colorPalette.length) {
+                    parsed.colorPalette = JSON.parse(JSON.stringify(selectedPaletteState.colors));
+                }
+
+                currentProductionData = parsed;
+
+                renderProductionWorkspace();
+                showToast("Pakej produksi video, skrip, storyboard & SRT berjaya dijana!", "success");
+            } catch (error) {
+                console.error("Ralat penjanaan:", error);
+                showToast("Gagal menjana. Pastikan input lengkap atau cuba lagi. (" + (error.message || "Ralat tidak diketahui") + ")", "error");
+            } finally {
+                setLoadingState(false);
+            }
+        }
+
+        // =========================================================================
+        // PENJANAAN VISUAL PRATONTON FRAME STORYBOARD
+        // =========================================================================
+        async function generateStoryboardFrame(sceneIndex) {
+            const scene = currentProductionData.scenes[sceneIndex];
+            if (!scene) return;
+
+            const box = document.getElementById(`imgBox-${sceneIndex}`);
+            if (box) {
+                box.innerHTML = `
+                    <div class="flex flex-col items-center justify-center gap-2 p-4">
+                        <svg class="w-6 h-6 text-amber-400 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span class="text-xs text-zinc-300 font-medium">Menjana visual babak ${scene.sceneNumber}...</span>
+                    </div>
+                `;
+            }
+
+            try {
+                const cleanPrompt = scene.aiVideoPromptEN.replace(/--ar\s+[\d.:]+/gi, "").trim();
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${IMAGE_MODEL}:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{
+                        parts: [{
+                            text: `Cinematic storyboard film frame, ${cleanPrompt}, high detail film still, no text, no watermark`
+                        }]
+                    }],
+                    generationConfig: {
+                        responseModalities: ["IMAGE"]
+                    }
+                };
+
+                const result = await fetchWithRetry(endpoint, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                const parts = result?.candidates?.[0]?.content?.parts || [];
+                const imgPart = parts.find(p => p.inlineData && p.inlineData.data);
+
+                if (!imgPart) {
+                    throw new Error("Data imej tidak dikembalikan.");
+                }
+
+                const mimeType = imgPart.inlineData.mimeType || "image/png";
+                scene.generatedImageUrl = `data:${mimeType};base64,${imgPart.inlineData.data}`;
+                renderProductionWorkspace();
+                showToast(`Visual storyboard Babak ${scene.sceneNumber} berjaya dijana!`, "success");
+            } catch (err) {
+                console.error("Ralat penjanaan visual:", err);
+                renderProductionWorkspace();
+                showToast(`Gagal menjana visual Babak ${scene.sceneNumber}.`, "error");
+            }
+        }
+
+        // =========================================================================
+        // PAPARAN RUANG KERJA PRODUKSI
+        // =========================================================================
+        function renderProductionWorkspace() {
+            const data = currentProductionData;
+            const emptyState = document.getElementById('emptyWorkspaceState');
+            const contentWrapper = document.getElementById('productionWorkspaceContent');
+
+            if (!data) {
+                if (emptyState) emptyState.classList.remove('hidden');
+                if (contentWrapper) contentWrapper.classList.add('hidden');
+                return;
+            }
+
+            // Sembunyikan ruang kosong dan paparkan ruang kerja apabila data wujud
+            if (emptyState) emptyState.classList.add('hidden');
+            if (contentWrapper) contentWrapper.classList.remove('hidden');
+
+            // 1. Ringkasan Projek & Palet Warna
+            document.getElementById('projectTitleDisplay').textContent = data.projectTitle || "Projek Video Tanpa Tajuk";
+            document.getElementById('projectLoglineDisplay').textContent = data.logline || "";
+            document.getElementById('visualDirectionDisplay').textContent = data.visualDirectionSummary || "";
+            document.getElementById('audioDirectionDisplay').textContent = data.audioAndMusicRecommendation || "";
+
+            const ratioVal = document.getElementById('aspectRatioInput')?.value || "16:9";
+            const totalSec = (data.scenes || []).reduce((acc, s) => acc + (Number(s.durationSeconds) || 0), 0);
+            const countScenes = (data.scenes || []).length;
+            document.getElementById('metaDurationBadge').textContent = `${totalSec}s • ${ratioVal} • ${countScenes} Babak`;
+            document.getElementById('sceneCountBadge').textContent = countScenes;
+
+            const paletteContainer = document.getElementById('colorPaletteContainer');
+            const paletteList = data.colorPalette && data.colorPalette.length ? data.colorPalette : selectedPaletteState.colors;
+            paletteContainer.innerHTML = paletteList.map(c => `
+                <button type="button" onclick="copyTextToClipboard('${escapeHtml(c.hex)}', 'Kod warna ${escapeHtml(c.hex)} disalin!')"
+                    class="group flex flex-col items-center text-center p-1.5 rounded-lg bg-studio-900/90 hover:bg-zinc-800 border border-zinc-800 transition"
+                    title="Klik untuk salin ${escapeHtml(c.hex)}">
+                    <span class="w-full h-6 rounded-md border border-white/10 shadow-inner mb-1" style="background-color: ${escapeHtml(c.hex)}"></span>
+                    <span class="text-[10px] font-mono text-zinc-300 group-hover:text-white uppercase">${escapeHtml(c.hex)}</span>
+                    <span class="text-[9px] text-zinc-500 truncate w-full">${escapeHtml(c.name)}</span>
+                </button>
+            `).join('');
+
+            // 2. Kad Storyboard & Babak
+            const activeTargetModel = document.getElementById('targetModelSelect')?.value || "Universal";
+            const scenesContainer = document.getElementById('scenesContainer');
+            scenesContainer.innerHTML = (data.scenes || []).map((scene, idx) => `
+                <article class="bg-studio-900 border border-zinc-800/90 hover:border-zinc-700/90 rounded-2xl p-5 shadow-lg transition space-y-4">
+                    <!-- Pengepala Babak -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800/80 pb-3">
+                        <div class="flex items-center gap-2.5">
+                            <span class="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono text-xs font-bold">
+                                BABAK ${scene.sceneNumber}
+                            </span>
+                            <h3 class="text-base font-bold text-white">${escapeHtml(scene.sceneTitle)}</h3>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-1 rounded-lg bg-studio-950 border border-zinc-800 font-mono text-xs text-zinc-300">
+                                ${escapeHtml(scene.timeRange)} (${scene.durationSeconds}s)
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Grid Kandungan Babak: Visual Storyboard & Cadangan Sinematografi -->
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                        <!-- Kotak Pratonton Storyboard Visual -->
+                        <div class="md:col-span-5">
+                            <div id="imgBox-${idx}" class="relative aspect-video w-full rounded-xl bg-studio-950 border border-dashed border-zinc-700/80 flex flex-col items-center justify-center p-4 text-center overflow-hidden">
+                                ${scene.generatedImageUrl
+                                    ? `<img src="${scene.generatedImageUrl}" alt="Storyboard Babak ${scene.sceneNumber}" class="w-full h-full object-cover rounded-xl">
+                                       <button type="button" onclick="generateStoryboardFrame(${idx})" class="absolute bottom-2.5 right-2.5 px-2.5 py-1.5 rounded-lg bg-zinc-950/80 hover:bg-zinc-900 text-[11px] font-medium text-zinc-200 border border-zinc-700 backdrop-blur-sm transition">Jana Semula</button>`
+                                    : `<div class="space-y-2">
+                                           <div class="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto text-zinc-500">
+                                               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                                   <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                               </svg>
+                                           </div>
+                                           <p class="text-[11px] text-zinc-400">Pratonton Frame Storyboard AI</p>
+                                           <button type="button" id="imgBtn-${idx}" onclick="generateStoryboardFrame(${idx})" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-200 border border-zinc-700 transition">
+                                               <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                               </svg>
+                                               <span>Jana Visual Babak</span>
+                                           </button>
+                                       </div>`
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Cadangan Teknikal & Penerangan Babak -->
+                        <div class="md:col-span-7 space-y-3">
+                            <!-- Lencana Cadangan Kamera & Pencahayaan -->
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 text-[11px] font-medium">
+                                    Syot: ${escapeHtml(scene.shotType)}
+                                </span>
+                                <span class="px-2.5 py-1 rounded-lg bg-sky-500/10 text-sky-300 border border-sky-500/20 text-[11px] font-medium">
+                                    Kamera: ${escapeHtml(scene.cameraMovement)}
+                                </span>
+                            </div>
+
+                            <div class="text-xs text-zinc-400">
+                                <span class="font-semibold text-zinc-300">Pencahayaan & Suasana:</span> ${escapeHtml(scene.lightingAndAtmosphere)}
+                            </div>
+
+                            <p class="text-sm text-zinc-200 leading-relaxed">
+                                ${escapeHtml(scene.visualDescriptionBM)}
+                            </p>
+
+                            <!-- Audio & Suara Latar Babak -->
+                            <div class="bg-studio-850/90 rounded-xl p-3 border border-zinc-800/90 space-y-1.5">
+                                <div class="text-xs text-zinc-300">
+                                    <span class="font-semibold text-amber-400">Suara Latar / Dialog:</span> "${escapeHtml(scene.voiceoverOrDialogue)}"
+                                </div>
+                                <div class="text-[11px] text-zinc-400">
+                                    <span class="font-semibold text-zinc-300">Kesan Bunyi (SFX):</span> ${escapeHtml(scene.soundEffects)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kotak Prompt Video AI (Dioptimumkan) -->
+                    <div class="bg-studio-950 rounded-xl p-3.5 border border-zinc-800 space-y-2">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-[11px] font-semibold uppercase tracking-wider text-amber-400">Prompt Video AI • ${escapeHtml(activeTargetModel)}</span>
+                            <button type="button" onclick="copyScenePrompt(${idx})" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-200 border border-zinc-700 transition">
+                                <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                                <span>Salin Prompt</span>
+                            </button>
+                        </div>
+                        <p class="font-mono text-xs text-zinc-200 leading-relaxed select-all">${escapeHtml(scene.aiVideoPromptEN)}</p>
+                        <div class="pt-1 border-t border-zinc-800/80 text-[11px] font-mono text-zinc-500">
+                            <span class="text-rose-400/80 font-semibold">Negative Prompt:</span> ${escapeHtml(scene.negativePromptEN)}
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+
+            // 3. Jadual Skrip Penuh (AV Script)
+            const avTableBody = document.getElementById('avScriptTableBody');
+            avTableBody.innerHTML = (data.scenes || []).map(scene => `
+                <tr class="hover:bg-studio-850/40 transition align-top">
+                    <td class="py-3.5 px-4 font-mono text-xs text-amber-400 whitespace-nowrap">
+                        <div class="font-bold">Babak ${scene.sceneNumber}</div>
+                        <div class="text-zinc-400 mt-0.5">${escapeHtml(scene.timeRange)}</div>
+                    </td>
+                    <td class="py-3.5 px-4 text-xs text-zinc-300 space-y-1">
+                        <div class="font-semibold text-white">[${escapeHtml(scene.shotType)} — ${escapeHtml(scene.cameraMovement)}]</div>
+                        <p class="leading-relaxed">${escapeHtml(scene.visualDescriptionBM)}</p>
+                    </td>
+                    <td class="py-3.5 px-4 text-xs space-y-1.5">
+                        <div class="text-zinc-100 font-medium">
+                            <span class="text-indigo-400 font-bold uppercase text-[10px] mr-1">VO:</span>
+                            "${escapeHtml(scene.voiceoverOrDialogue)}"
+                        </div>
+                        <div class="text-zinc-400 text-[11px]">
+                            <span class="text-zinc-500 font-semibold uppercase text-[10px] mr-1">SFX:</span>
+                            ${escapeHtml(scene.soundEffects)}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            document.getElementById('fullScriptNarrative').textContent = data.fullScriptMarkdown || "";
+
+            // 4. Editor Subtitle (.SRT)
+            const srtArea = document.getElementById('srtEditorTextarea');
+            srtArea.value = (data.srtContent || "").trim();
+            validateSrtContent();
+
+            // 5. Paparan JSON
+            const exportCleanJson = {
+                ...data,
+                scenes: data.scenes.map(({ generatedImageUrl, ...rest }) => rest)
+            };
+            document.getElementById('jsonOutputDisplay').textContent = JSON.stringify(exportCleanJson, null, 2);
+        }
+
+        // =========================================================================
+        // FUNGSI UTILITI SUBTITLE (.SRT), SALINAN & MUAT TURUN FAIL
+        // =========================================================================
+        function formatSecondsToSrtTime(totalSeconds) {
+            const hrs = Math.floor(totalSeconds / 3600);
+            const mins = Math.floor((totalSeconds % 3600) / 60);
+            const secs = Math.floor(totalSeconds % 60);
+            const ms = Math.round((totalSeconds - Math.floor(totalSeconds)) * 1000);
+            return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')},${String(ms).padStart(3, '0')}`;
+        }
+
+        function rebuildSrtFromScenes() {
+            let currentSec = 0;
+            const lines = (currentProductionData.scenes || []).map((scene, index) => {
+                const dur = Number(scene.durationSeconds) || 5;
+                const startStr = formatSecondsToSrtTime(currentSec);
+                const endStr = formatSecondsToSrtTime(currentSec + dur);
+                currentSec += dur;
+                const text = (scene.voiceoverOrDialogue || scene.sceneTitle || "").trim();
+                return `${index + 1}\n${startStr} --> ${endStr}\n${text}`;
+            });
+            const srtText = lines.join("\n\n");
+            document.getElementById('srtEditorTextarea').value = srtText;
+            currentProductionData.srtContent = srtText;
+            validateSrtContent();
+            showToast("Fail SRT disegerakkan semula daripada setiap babak.", "success");
+        }
+
+        function validateSrtContent() {
+            const content = document.getElementById('srtEditorTextarea').value.trim();
+            const badge = document.getElementById('srtValidationBadge');
+            const timestampRegex = /\d{2}:\d{2}:\d{2},\d{3}\s-->\s\d{2}:\d{2}:\d{2},\d{3}/g;
+            const matches = content.match(timestampRegex);
+
+            if (matches && matches.length > 0) {
+                badge.textContent = `Format SRT Sah • ${matches.length} Segmen`;
+                badge.className = "px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/15 text-emerald-300 border border-emerald-500/30";
+            } else {
+                badge.textContent = "Semak Format Cap Masa SRT";
+                badge.className = "px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30";
+            }
+        }
+
+        function copyScenePrompt(idx) {
+            const scene = currentProductionData.scenes[idx];
+            if (!scene) return;
+            copyTextToClipboard(scene.aiVideoPromptEN, `Prompt Babak ${scene.sceneNumber} disalin!`);
+        }
+
+        function copyScriptText() {
+            const text = buildPlainTextScript();
+            copyTextToClipboard(text, "Skrip penuh AV disalin ke papan keratan!");
+        }
+
+        function copySrtText() {
+            const srtText = document.getElementById('srtEditorTextarea').value;
+            copyTextToClipboard(srtText, "Kandungan subtitle .SRT disalin!");
+        }
+
+        function copyJsonOutput() {
+            const jsonText = document.getElementById('jsonOutputDisplay').textContent;
+            copyTextToClipboard(jsonText, "Data JSON berstruktur disalin!");
+        }
+
+        function copyAllPaletteHex() {
+            const palette = currentProductionData.colorPalette || selectedPaletteState.colors || [];
+            if (!palette.length) return;
+            const summary = palette.map(c => `${c.name}: ${c.hex}`).join(" | ");
+            copyTextToClipboard(summary, "Semua kod warna palet disalin!");
+        }
+
+        function applyPaletteToAllPrompts() {
+            const palette = currentProductionData.colorPalette || selectedPaletteState.colors || [];
+            if (!palette.length || !currentProductionData.scenes) return;
+
+            const colorSnippet = `color palette (${palette.map(c => `${c.name} ${c.hex}`).join(", ")}), ${selectedPaletteState.englishGrading}`;
+
+            currentProductionData.scenes = currentProductionData.scenes.map(scene => {
+                // Elak pertindihan jika sudah disuntik sebelum ini
+                const cleanedPrompt = scene.aiVideoPromptEN.replace(/,\s*color palette \([^)]+\)[^-]*/i, "");
+                const arMatch = cleanedPrompt.match(/(--ar\s+[\d.:]+)/i);
+                let updatedPrompt = "";
+                if (arMatch) {
+                    updatedPrompt = cleanedPrompt.replace(arMatch[0], `, ${colorSnippet} ${arMatch[0]}`);
+                } else {
+                    updatedPrompt = `${cleanedPrompt}, ${colorSnippet}`;
+                }
+                return {
+                    ...scene,
+                    aiVideoPromptEN: updatedPrompt.replace(/\s+,/g, ",")
+                };
+            });
+
+            renderProductionWorkspace();
+            showToast("Tema palet warna telah disuntik ke dalam semua prompt babak!", "success");
+        }
+
+        function copyTextToClipboard(text, successMessage = "Teks disalin ke papan keratan!") {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            textArea.style.top = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast(successMessage, "success");
+                } else {
+                    showToast("Gagal menyalin teks.", "error");
+                }
+            } catch (err) {
+                showToast("Pelayar tidak menyokong salinan automatik.", "error");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function downloadFile(filename, content, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function sanitizeFilename(name) {
+            return (name || "video_produksi")
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, "_")
+                .replace(/^_|_$/g, "");
+        }
+
+        function downloadSrtFile() {
+            const srtContent = document.getElementById('srtEditorTextarea').value.trim();
+            if (!srtContent) {
+                showToast("Tiada kandungan SRT untuk dimuat turun.", "error");
+                return;
+            }
+            const slug = sanitizeFilename(currentProductionData.projectTitle);
+            downloadFile(`${slug}_subtitle.srt`, srtContent + "\n", "application/x-subrip;charset=utf-8");
+            showToast(`Fail ${slug}_subtitle.srt sedang dimuat turun.`, "success");
+        }
+
+        function buildPlainTextScript() {
+            const d = currentProductionData;
+            let out = `TAJUK PROJEK: ${d.projectTitle}\n`;
+            out += `LOGLINE: ${d.logline}\n`;
+            out += `ARAHAN VISUAL: ${d.visualDirectionSummary}\n`;
+            out += `ARAHAN AUDIO: ${d.audioAndMusicRecommendation}\n`;
+            out += `====================================================\n\n`;
+            (d.scenes || []).forEach(s => {
+                out += `BABAK ${s.sceneNumber} [${s.timeRange}] - ${s.sceneTitle}\n`;
+                out += `Syot & Kamera: ${s.shotType} | ${s.cameraMovement}\n`;
+                out += `Visual: ${s.visualDescriptionBM}\n`;
+                out += `Suara Latar (VO): "${s.voiceoverOrDialogue}"\n`;
+                out += `SFX: ${s.soundEffects}\n`;
+                out += `Prompt AI Video: ${s.aiVideoPromptEN}\n\n`;
+            });
+            return out;
+        }
+
+        function downloadScriptTxt() {
+            const slug = sanitizeFilename(currentProductionData.projectTitle);
+            downloadFile(`${slug}_skrip.txt`, buildPlainTextScript(), "text/plain;charset=utf-8");
+            showToast(`Fail ${slug}_skrip.txt dimuat turun.`, "success");
+        }
+
+        function exportFullProductionBible() {
+            const slug = sanitizeFilename(currentProductionData.projectTitle);
+            const srtContent = document.getElementById('srtEditorTextarea').value.trim();
+            const fullContent = `${buildPlainTextScript()}====================================================\nSUBTITLE (.SRT)\n====================================================\n\n${srtContent}\n`;
+            downloadFile(`${slug}_pakej_lengkap.txt`, fullContent, "text/plain;charset=utf-8");
+            showToast("Pakej produksi lengkap (.TXT) berjaya dieksport!", "success");
+        }
+
+        // =========================================================================
+        // NOTIFIKASI TOAST & KESELAMATAN HTML
+        // =========================================================================
+        function showToast(message, type = "info") {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+
+            let colors = "bg-zinc-900 border-zinc-700 text-zinc-100";
+            if (type === "success") colors = "bg-emerald-950/95 border-emerald-500/40 text-emerald-200";
+            if (type === "error") colors = "bg-rose-950/95 border-rose-500/40 text-rose-200";
+
+            toast.className = `pointer-events-auto px-4 py-3 rounded-xl border shadow-2xl text-xs sm:text-sm font-medium flex items-center gap-2.5 transition-all duration-300 transform translate-y-2 opacity-0 ${colors}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return "";
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Inisialisasi paparan awal semasa halaman dimuatkan
+        window.addEventListener('DOMContentLoaded', () => {
+            initColorPaletteSelector();
+            renderProductionWorkspace();
+        });
+    </script>
+</body>
+</html>
