@@ -105,29 +105,6 @@
                     </button>
                 </div>
 
-                <!-- Templat Pantas (Presets) -->
-                <div>
-                    <label class="block text-xs font-medium text-zinc-400 mb-2">Templat Idea Pantas:</label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button type="button" onclick="applyPreset('kopi')" class="text-left p-2.5 rounded-xl bg-studio-850 hover:bg-zinc-800 border border-zinc-800 hover:border-amber-500/40 transition group">
-                            <div class="text-xs font-semibold text-zinc-200 group-hover:text-amber-300 truncate">Iklan Kopi Artisan</div>
-                            <div class="text-[11px] text-zinc-500 truncate">Komersial • 30s • 16:9</div>
-                        </button>
-                        <button type="button" onclick="applyPreset('alam')" class="text-left p-2.5 rounded-xl bg-studio-850 hover:bg-zinc-800 border border-zinc-800 hover:border-amber-500/40 transition group">
-                            <div class="text-xs font-semibold text-zinc-200 group-hover:text-amber-300 truncate">Misteri Hutan Belum</div>
-                            <div class="text-[11px] text-zinc-500 truncate">Dokumentari • 45s • 16:9</div>
-                        </button>
-                        <button type="button" onclick="applyPreset('cyberpunk')" class="text-left p-2.5 rounded-xl bg-studio-850 hover:bg-zinc-800 border border-zinc-800 hover:border-amber-500/40 transition group">
-                            <div class="text-xs font-semibold text-zinc-200 group-hover:text-amber-300 truncate">Kuala Lumpur 2099</div>
-                            <div class="text-[11px] text-zinc-500 truncate">Sci-Fi Treler • 30s • 2.39:1</div>
-                        </button>
-                        <button type="button" onclick="applyPreset('reels')" class="text-left p-2.5 rounded-xl bg-studio-850 hover:bg-zinc-800 border border-zinc-800 hover:border-amber-500/40 transition group">
-                            <div class="text-xs font-semibold text-zinc-200 group-hover:text-amber-300 truncate">Tips Fokus & Kerja</div>
-                            <div class="text-[11px] text-zinc-500 truncate">TikTok/Reels • 30s • 9:16</div>
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Borang Konfigurasi -->
                 <form id="briefForm" onsubmit="handleGenerateSubmit(event)" class="space-y-4">
                     <!-- Topik / Konsep Video -->
@@ -198,6 +175,7 @@
                         <div>
                             <label for="sceneCountSelect" class="block text-xs font-medium text-zinc-300 mb-1.5">Bilangan Babak</label>
                             <select id="sceneCountSelect" class="w-full rounded-xl bg-studio-950 border border-zinc-800 focus:border-amber-500 text-sm text-zinc-200 p-2.5">
+                                <option value="3">3 Babak</option>
                                 <option value="4">4 Babak</option>
                                 <option value="5" selected>5 Babak</option>
                                 <option value="6">6 Babak</option>
@@ -294,26 +272,23 @@
             </section>
 
             <!-- PANEL KANAN: Ruang Kerja Hasil Produksi -->
-            <section class="lg:col-span-8 space-y-5">
+            <section class="lg:col-span-8 relative min-h-[400px]">
+                
+                <!-- Paparan Ruang Kerja Kosong (Empty State) -->
+                <div id="emptyWorkspaceState" class="absolute inset-0 flex flex-col items-center justify-center text-center p-8 bg-studio-900 border border-zinc-800/90 rounded-2xl shadow-xl h-full">
+                    <div class="w-16 h-16 mb-4 rounded-2xl bg-zinc-800/50 flex items-center justify-center border border-zinc-700/50">
+                        <svg class="w-8 h-8 text-zinc-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-semibold text-zinc-300">Ruang Kerja Produksi Kosong</h3>
+                    <p class="text-sm text-zinc-500 mt-2 max-w-sm leading-relaxed">Sila lengkapkan taklimat di sebelah kiri dan klik <strong class="text-zinc-400">"Jana Pakej Produksi Video"</strong> untuk menjana skrip, storyboard dan sari kata (.SRT).</p>
+                </div>
 
-                <!-- Kad Ringkasan Projek & Palet Warna -->
-                <div id="projectOverviewCard" class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-5 sm:p-6 shadow-xl">
-                    <div class="flex flex-wrap items-start justify-between gap-4">
-                        <div class="space-y-1.5 max-w-2xl">
-                            <div class="flex items-center gap-2">
-                                <span id="sampleBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
-                                    Contoh Sedia Ada
-                                </span>
-                                <span id="metaDurationBadge" class="text-xs text-zinc-400 font-mono">30s • 16:9 • 5 Babak</span>
-                            </div>
-                            <h2 id="projectTitleDisplay" class="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                                Jiwa Kopi Tanah Tinggi
-                            </h2>
-                            <p id="projectLoglineDisplay" class="text-sm text-zinc-300 leading-relaxed">
-                                Perjalanan visual dari embun pagi ladang kopi tanah tinggi hingga ke titisan espreso pertama yang membangkitkan inspirasi hari baharu.
-                            </p>
-                        </div>
-
+                <!-- Kandungan Ruang Kerja (Akan dipaparkan selepas AI menjana data) -->
+                <div id="productionWorkspaceContent" class="hidden space-y-5">
+                    
+                    <!-- Kad Ringkasan Projek & Palet Warna -->
                         <!-- Palet Warna Sinematik -->
                         <div class="bg-studio-950/90 border border-zinc-800 rounded-xl p-3.5 w-full sm:w-auto sm:min-w-[260px]">
                             <div class="flex items-center justify-between gap-2 mb-2.5">
@@ -490,22 +465,22 @@
                     </div>
                 </div>
 
-                <!-- KANDUNGAN TAB 4: MASTER PROMPT & JSON -->
-                <div id="panel-master" class="tab-panel hidden space-y-4">
-                    <div class="bg-studio-900 border border-zinc-800 rounded-2xl p-5 sm:p-6 space-y-4">
-                        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 pb-4">
-                            <div>
-                                <h3 class="text-base font-bold text-white">Struktur JSON & Rangkaian Prompt Induk</h3>
-                                <p class="text-xs text-zinc-400">Gunakan struktur ini untuk automasi aliran kerja API atau rujukan produksi penuh.</p>
+                    <div id="panel-master" class="tab-panel hidden space-y-4">
+                        <div class="bg-studio-900 border border-zinc-800 rounded-2xl p-5 sm:p-6 space-y-4">
+                            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 pb-4">
+                                <div>
+                                    <h3 class="text-base font-bold text-white">Struktur JSON & Rangkaian Prompt Induk</h3>
+                                    <p class="text-xs text-zinc-400">Gunakan struktur ini untuk automasi aliran kerja API atau rujukan produksi penuh.</p>
+                                </div>
+                                <button type="button" onclick="copyJsonOutput()" class="px-3.5 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-200 border border-zinc-700 transition">
+                                    Salin JSON Berstruktur
+                                </button>
                             </div>
-                            <button type="button" onclick="copyJsonOutput()" class="px-3.5 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-200 border border-zinc-700 transition">
-                                Salin JSON Berstruktur
-                            </button>
+                            <pre id="jsonOutputDisplay" class="w-full rounded-xl bg-studio-950 border border-zinc-800 font-mono text-xs text-zinc-300 p-4 overflow-x-auto max-h-[500px] leading-relaxed"></pre>
                         </div>
-                        <pre id="jsonOutputDisplay" class="w-full rounded-xl bg-studio-950 border border-zinc-800 font-mono text-xs text-zinc-300 p-4 overflow-x-auto max-h-[500px] leading-relaxed"></pre>
                     </div>
-                </div>
 
+                </div>
             </section>
         </div>
     </main>
@@ -521,97 +496,8 @@
         const TEXT_MODEL = "gemini-3-flash-preview";
         const IMAGE_MODEL = "gemini-3.1-flash-image-preview";
 
-        let currentProductionData = {
-            projectTitle: "Jiwa Kopi Tanah Tinggi",
-            logline: "Perjalanan visual dari embun pagi ladang kopi tanah tinggi hingga ke titisan espreso pertama yang membangkitkan inspirasi hari baharu.",
-            visualDirectionSummary: "Lensa anamorfik 35mm & 85mm makro, pencahayaan semula jadi Golden Hour dengan kontras hangat dan bayang lembut.",
-            audioAndMusicRecommendation: "Petikan gitar akustik minimalis dengan alunan piano hangat (85 BPM), digabungkan bersama kesan bunyi ASMR biji kopi dikisar dan wap panas.",
-            colorPalette: [
-                { hex: "#D97706", name: "Amber Emas" },
-                { hex: "#291D18", name: "Bayang Gelap" },
-                { hex: "#10B981", name: "Zamrud Alam" },
-                { hex: "#FDE68A", name: "Cahaya Subuh" }
-            ],
-            fullScriptMarkdown: "BABAK 1 (00:00 - 00:06): Suasana subuh berkabus di ladang kopi tanah tinggi.\nVO: \"Setiap kisah hebat bermula dalam ketenangan pagi.\"\n\nBABAK 2 (00:06 - 00:12): Tangan petani memetik buah kopi merah ranum.\nVO: \"Dipetik dengan penuh teliti dari puncak tanah tinggi.\"\n\nBABAK 3 (00:12 - 00:18): Biji kopi dipanggang hingga keemasan.\nVO: \"Dipanggang perlahan untuk membangkitkan aroma sejati.\"\n\nBABAK 4 (00:18 - 00:24): Ekstraksi espreso pekat mengalir perlahan.\nVO: \"Setiap titisan menyimpan kehangatan dan ketelitian.\"\n\nBABAK 5 (00:24 - 00:30): Secawan kopi panas di atas meja kayu berlatar cahaya pagi.\nVO: \"Jiwa Kopi Tanah Tinggi. Rasai keasliannya.\"",
-            srtContent: "1\n00:00:00,000 --> 00:00:06,000\nSetiap kisah hebat bermula dalam ketenangan pagi.\n\n2\n00:00:06,000 --> 00:00:12,000\nDipetik dengan penuh teliti dari puncak tanah tinggi.\n\n3\n00:00:12,000 --> 00:00:18,000\nDipanggang perlahan untuk membangkitkan aroma sejati.\n\n4\n00:00:18,000 --> 00:00:24,000\nSetiap titisan menyimpan kehangatan dan ketelitian.\n\n5\n00:00:24,000 --> 00:00:30,000\nJiwa Kopi Tanah Tinggi. Rasai keasliannya.",
-            scenes: [
-                {
-                    sceneNumber: 1,
-                    timeRange: "00:00 - 00:06",
-                    durationSeconds: 6,
-                    sceneTitle: "Subuh Berkabus di Tanah Tinggi",
-                    shotType: "Wide Aerial Shot",
-                    cameraMovement: "Slow Drone Push-In",
-                    lightingAndAtmosphere: "Cahaya matahari terbit keemasan menembusi kabus pagi yang sejuk",
-                    visualDescriptionBM: "Pemandangan luas ladang kopi berbukit di tanah tinggi yang diselimuti kabus nipis ketika sinar matahari pagi mula menyinari pucuk daun.",
-                    aiVideoPromptEN: "Wide aerial drone shot slowly pushing in over lush highland coffee plantation shrouded in morning mist, golden sunrise rays piercing through clouds, warm golden hour color grading, rich amber highlights, deep espresso shadows, 35mm anamorphic lens, photorealistic, 4k --ar 16:9",
-                    negativePromptEN: "blurry, oversaturated, artificial CGI, harsh midday sun, watermark, text, distorted horizon",
-                    voiceoverOrDialogue: "Setiap kisah hebat bermula dalam ketenangan pagi.",
-                    soundEffects: "Tiupan angin lembut, kicauan burung hutan pagi",
-                    generatedImageUrl: null
-                },
-                {
-                    sceneNumber: 2,
-                    timeRange: "00:06 - 00:12",
-                    durationSeconds: 6,
-                    sceneTitle: "Petikan Buah Kopi Ranum",
-                    shotType: "Close-Up Shot",
-                    cameraMovement: "Gentle Handheld Follow",
-                    lightingAndAtmosphere: "Cahaya sisi semula jadi dengan titisan embun berkilau",
-                    visualDescriptionBM: "Jari-jemari petani tempatan memetik buah ceri kopi merah ranum dengan penuh cermat sambil embun pagi jatuh perlahan.",
-                    aiVideoPromptEN: "Close-up cinematic shot of weathered farmer hands gently picking ripe red coffee cherries from branch, morning dew drops glistening, shallow depth of field, warm golden hour color grading, rich amber highlights, 85mm macro lens, Kodak Vision3 500T --ar 16:9",
-                    negativePromptEN: "extra fingers, deformed hands, plastic texture, low resolution, shaky camera",
-                    voiceoverOrDialogue: "Dipetik dengan penuh teliti dari puncak tanah tinggi.",
-                    soundEffects: "Bunyi dedaun disentuh, petikan lembut buah kopi",
-                    generatedImageUrl: null
-                },
-                {
-                    sceneNumber: 3,
-                    timeRange: "00:12 - 00:18",
-                    durationSeconds: 6,
-                    sceneTitle: "Seni Pemanggangan Artisan",
-                    shotType: "Medium Close-Up",
-                    cameraMovement: "Slow Orbit Right",
-                    lightingAndAtmosphere: "Pencahayaan hangat dramatik dengan asap nipis berputar",
-                    visualDescriptionBM: "Biji kopi berputar di dalam mesin pemanggang tembaga, bertukar warna coklat keemasan dengan kepulan asap aromatik.",
-                    aiVideoPromptEN: "Medium close-up slow orbit shot of roasted coffee beans tumbling inside a vintage copper drum roaster, delicate aromatic smoke swirling in warm backlight, warm golden hour color grading, deep espresso shadows, 50mm prime lens, 4k --ar 16:9",
-                    negativePromptEN: "burnt black smoke, fire explosion, blurry beans, digital noise, text",
-                    voiceoverOrDialogue: "Dipanggang perlahan untuk membangkitkan aroma sejati.",
-                    soundEffects: "Bunyi biji kopi bergeser (first crack), deruan mesin pemanggang",
-                    generatedImageUrl: null
-                },
-                {
-                    sceneNumber: 4,
-                    timeRange: "00:18 - 00:24",
-                    durationSeconds: 6,
-                    sceneTitle: "Titisan Espreso Keemasan",
-                    shotType: "Extreme Macro Shot",
-                    cameraMovement: "Slow Vertical Tilt Down",
-                    lightingAndAtmosphere: "Sorotan cahaya hangat pada crema espreso",
-                    visualDescriptionBM: "Aliran espreso pekat berwarna keemasan menitis perlahan dari portafilter ke dalam cawan seramik dalam gerak perlahan.",
-                    aiVideoPromptEN: "Extreme macro slow-motion shot of rich golden-brown espresso crema streaming from bottomless portafilter into ceramic cup, steam rising gently, warm golden hour color grading, rich amber highlights, 100mm macro lens, commercial studio lighting --ar 16:9",
-                    negativePromptEN: "watery liquid, dirty machine, harsh flash, low frame rate, artifact",
-                    voiceoverOrDialogue: "Setiap titisan menyimpan kehangatan dan ketelitian.",
-                    soundEffects: "Bunyi mesin espreso bertekanan tinggi dan titisan cecair pekat",
-                    generatedImageUrl: null
-                },
-                {
-                    sceneNumber: 5,
-                    timeRange: "00:24 - 00:30",
-                    durationSeconds: 6,
-                    sceneTitle: "Sajian Inspirasi Pagi",
-                    shotType: "Medium Shot",
-                    cameraMovement: "Slow Pull Back",
-                    lightingAndAtmosphere: "Cahaya tingkap pagi yang lembut dengan bayang panjang",
-                    visualDescriptionBM: "Secawan kopi panas berasap nipis diletakkan di atas meja kayu bersebelahan tingkap yang menghadap pemandangan bukit berkabus.",
-                    aiVideoPromptEN: "Medium shot slowly pulling back from a steaming cup of artisan coffee on a rustic wooden table by a window overlooking misty highlands, soft morning sunbeams, warm golden hour color grading, soft creamy tones, 35mm film aesthetic --ar 16:9",
-                    negativePromptEN: "cluttered table, cold blue lighting, distorted cup, watermark, logo",
-                    voiceoverOrDialogue: "Jiwa Kopi Tanah Tinggi. Rasai keasliannya.",
-                    soundEffects: "Bunyi cawan diletakkan perlahan, alunan penutup piano hangat",
-                    generatedImageUrl: null
-                }
-            ]
-        };
+        // Buang data contoh dan tetapkan kepada null
+        let currentProductionData = null;
 
         // =========================================================================
         // TEMPLAT PRESET PANTAS & PALET WARNA TEMA
@@ -753,76 +639,9 @@
             }
         }
 
-        const PRESETS = {
-            kopi: {
-                topic: "Iklan komersial sinematik memperkenalkan kopi panggang artisan dari tanah tinggi Malaysia pada waktu subuh berkabus, menonjolkan proses petikan, pemanggangan dan ekstraksi espreso.",
-                ratio: "16:9",
-                duration: "30 saat",
-                scenes: "5",
-                style: "Sinematik Realistik (Photorealistic 35mm Film, Depth of Field)",
-                tone: "Hangat & Emosional",
-                model: "Universal (Veo 2 / Sora / Runway Gen-3 / Kling)",
-                lang: "Bahasa Melayu (Standard & Natural)",
-                paletteId: "golden_hour"
-            },
-            alam: {
-                topic: "Dokumentari alam semula jadi mengenai keajaiban hutan hujan tertua di Taman Negeri Royal Belum pada waktu pagi, memaparkan burung enggang terbang merentasi kabus sungai dan cahaya menembusi kanopi pokok.",
-                ratio: "16:9",
-                duration: "45 saat",
-                scenes: "6",
-                style: "Dokumentari Alam & Budaya (National Geographic Style, Natural Light)",
-                tone: "Inspirasi & Epik",
-                model: "Google Flow (Veo 3 / Scene Builder)",
-                lang: "Bahasa Melayu (Standard & Natural)",
-                paletteId: "emerald_nature"
-            },
-            cyberpunk: {
-                topic: "Treler filem sci-fi bertajuk Kuala Lumpur 2099 pada malam hujan lebat dengan lampu neon, kereta terbang melintasi Menara Berkembar futuristik dan seorang detektif siber menjejaki petunjuk hologram.",
-                ratio: "2.39:1",
-                duration: "30 saat",
-                scenes: "5",
-                style: "Cyberpunk Neon Futuristik (Anamorphic Lens Flare, Rainy Night)",
-                tone: "Misteri & Dramatik",
-                model: "Google Flow (Veo 3 / Scene Builder)",
-                lang: "Bahasa Melayu (Standard & Natural)",
-                paletteId: "cyberpunk_neon"
-            },
-            reels: {
-                topic: "Video pendek vertikal motivasi produktiviti untuk pekerja kreatif: 3 tabiat pagi sebelum membuka komputer riba untuk meningkatkan fokus kerja mendalam.",
-                ratio: "9:16",
-                duration: "30 saat",
-                scenes: "5",
-                style: "Minimalis Korporat & Teknologi (Clean Editorial Aesthetic)",
-                tone: "Energik & Dinamik",
-                model: "Universal (Google Flow / Veo 3 / Sora / Runway / Kling)",
-                lang: "Bahasa Melayu (Standard & Natural)",
-                paletteId: "pastel_clean"
-            }
-        };
-
         // =========================================================================
         // PENGENDALI BORANG, TAB & ANTARA MUKA
         // =========================================================================
-        function applyPreset(presetKey) {
-            const p = PRESETS[presetKey];
-            if (!p) return;
-
-            document.getElementById('topicInput').value = p.topic;
-            selectAspectRatio(p.ratio);
-            document.getElementById('durationSelect').value = p.duration;
-            document.getElementById('sceneCountSelect').value = p.scenes;
-            document.getElementById('visualStyleSelect').value = p.style;
-            document.getElementById('toneSelect').value = p.tone;
-            document.getElementById('targetModelSelect').value = p.model;
-            document.getElementById('languageSelect').value = p.lang;
-
-            if (p.paletteId) {
-                selectColorPalettePreset(p.paletteId);
-            }
-
-            showToast("Templat idea dimuatkan! Tekan 'Jana Pakej Produksi Video'.", "info");
-        }
-
         function selectAspectRatio(ratio) {
             document.getElementById('aspectRatioInput').value = ratio;
             document.querySelectorAll('.ratio-btn').forEach(btn => {
@@ -1088,12 +907,6 @@ Peraturan Penting:
 
                 currentProductionData = parsed;
 
-                const sampleBadge = document.getElementById('sampleBadge');
-                if (sampleBadge) {
-                    sampleBadge.textContent = "Dijana AI • Sedia";
-                    sampleBadge.className = "inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/15 text-emerald-300 border border-emerald-500/30";
-                }
-
                 renderProductionWorkspace();
                 showToast("Pakej produksi video, skrip, storyboard & SRT berjaya dijana!", "success");
             } catch (error) {
@@ -1167,7 +980,18 @@ Peraturan Penting:
         // =========================================================================
         function renderProductionWorkspace() {
             const data = currentProductionData;
-            if (!data) return;
+            const emptyState = document.getElementById('emptyWorkspaceState');
+            const contentWrapper = document.getElementById('productionWorkspaceContent');
+
+            if (!data) {
+                if (emptyState) emptyState.classList.remove('hidden');
+                if (contentWrapper) contentWrapper.classList.add('hidden');
+                return;
+            }
+
+            // Sembunyikan ruang kosong dan paparkan ruang kerja apabila data wujud
+            if (emptyState) emptyState.classList.add('hidden');
+            if (contentWrapper) contentWrapper.classList.remove('hidden');
 
             // 1. Ringkasan Projek & Palet Warna
             document.getElementById('projectTitleDisplay').textContent = data.projectTitle || "Projek Video Tanpa Tajuk";
